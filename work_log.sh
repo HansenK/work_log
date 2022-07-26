@@ -2,13 +2,14 @@
 
 should_init=$1
 # Init
-SCRIPT_FILE=./work_log.sh
-if ["$should_init" = "init"] && test -f "$SCRIPT_FILE"; then
+
+if [ "$should_init" = "init" ]; then
 	echo "[+] starting..."
-	sudo mv work_log.sh /usr/local/bin
-	chmod +x /usr/local/bin/work_log.sh
-	alias work_log="bash work_log.sh"
+	sudo cp work_log.sh /usr/local/bin
+	sudo chmod +x /usr/local/bin/work_log.sh
+	echo 'alias work_log="bash work_log.sh"' >> ~/.bash_aliases
 	echo "[+] Done! Now you can run 'work_log' command from inside a project to get your work log."
+	exit 0
 fi
 
 last_week_end_date=$(date -d 'last Sunday' +"%Y-%m-%d")
@@ -34,12 +35,8 @@ then
     sudo apt -qq install jq &> /dev/null
 fi
 
-clear
-
 # Config file and values management
-current_user=$(whoami)
-
-CONFIG_FILE=/home/$current_user/work_log_config.json
+CONFIG_FILE=~/work_log_config.json
 if ! test -f "$CONFIG_FILE"; then
 	read -p "Enter your Git username: " git_username
 	read -p "Enter your JIRA domain (example.atlassian.net): " jira_domain
@@ -47,7 +44,7 @@ if ! test -f "$CONFIG_FILE"; then
 	read -p "Enter your JIRA API token (manage your tokens from here: https://id.atlassian.com/manage-profile/security/api-tokens): " jira_api_token
 	read -p "Enter the Toggl project name or id: " toggl_project
 	
-	echo "{\"git_username\": \"$git_username\", \"jira_domain\": \"$jira_domain\", \"jira_email\": \"$jira_email\", \"jira_api_token\": \"$jira_api_token\", \"toggl_project\": \"$toggl_project\"}" > /home/$current_user/work_log_config.json
+	echo "{\"git_username\": \"$git_username\", \"jira_domain\": \"$jira_domain\", \"jira_email\": \"$jira_email\", \"jira_api_token\": \"$jira_api_token\", \"toggl_project\": \"$toggl_project\"}" > ~/work_log_config.json
 else
 	git_username=$(cat $CONFIG_FILE | jq '.git_username' | sed 's/"//g')
 	jira_domain=$(cat $CONFIG_FILE | jq '.jira_domain' | sed 's/"//g')

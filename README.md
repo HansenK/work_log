@@ -10,5 +10,5 @@ Bash script to get a work log from last week (more customizations soon!) from JI
 ----
 
 # To Do
-- [ ] Check if user is inside a .git firectory
-- [ ] Improvements on init config: Check if, when init was run it is in the correct folder (with the script file)
+- [ ] Check if user is inside a .git directory
+- [ ] Improvements on init config: Check if, when init command was ran,it is in the correct folder (with the script file)

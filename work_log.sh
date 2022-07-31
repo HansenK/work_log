@@ -55,8 +55,12 @@ fi
 
 clear
 
-# Get git history 
-all_history=$(git log origin --oneline --decorate --all --author=$git_username --after=$last_week_start_date --until=$last_week_end_date)
+# Get git history
+all_history=$(git log --oneline --decorate --all --author=$git_username --after=$last_week_start_date --until=$last_week_end_date)
+
+if [ $? = 128 ]; then
+	exit 0
+fi
 
 # Get only the tickets id
 for string in "$(echo $all_history | grep -Po "\[LOB-[0-9]{1,}\]")"; do

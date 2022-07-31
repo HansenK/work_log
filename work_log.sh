@@ -4,12 +4,17 @@ should_init=$1
 # Init
 
 if [ "$should_init" = "init" ]; then
-	echo "[+] starting..."
-	sudo cp work_log.sh /usr/local/bin
-	sudo chmod +x /usr/local/bin/work_log.sh
-	echo 'alias work_log="bash work_log.sh"' >> ~/.bash_aliases
-	echo "[+] Done! Now you can run 'work_log' command from inside a project to get your work log."
-	exit 0
+	if [[ -f work_log.sh ]]; then
+		echo "[+] starting..."
+		sudo cp work_log.sh /usr/local/bin
+		sudo chmod +x /usr/local/bin/work_log.sh
+		echo 'alias work_log="bash work_log.sh"' >> ~/.bash_aliases
+		echo "[+] Done! Now you can run 'work_log' command from inside a project to get your work log."
+		exit 0
+	fi
+
+	echo "[-] Error! You must only run the init config inside the repository folder, where the work_log.sh file is located."
+	exit 1	
 fi
 
 last_week_end_date=$(date -d 'last Sunday' +"%Y-%m-%d")

@@ -68,7 +68,7 @@ if [ $? = 128 ]; then
 fi
 
 # Get only the tickets id
-for string in "$(echo $all_history | grep -Po "\[[A-Z]{2,}-[0-9]{1,}\])"; do
+for string in "$(echo $all_history | grep -Po "\[[A-Z]{2,}-[0-9]{1,}\]")"; do
 	match="${match:+$match }$string"
 done
 

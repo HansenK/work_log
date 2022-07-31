@@ -7,8 +7,5 @@ Bash script to get a work log from last week (more customizations soon!) from JI
 3. Now the initial configuration is done, you can go to any of your projects and run `work_log`.
 4. In the first time, you'll be asked to install a few requied dependencies, also, you'll be prompted to enter a few configuration values.
 
-----
-
-# To Do
-- [ ] Check if user is inside a .git directory
-- [ ] Improvements on init config: Check if, when init command was ran,it is in the correct folder (with the script file)
+## Clear Configuration
+In case you want to update your configurations (username, email, etc...) you can run `work_log clear-config` to remove all of them.

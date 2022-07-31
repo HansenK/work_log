@@ -74,7 +74,7 @@ fi
 
 # Config file and values management
 if ! test -f "$CONFIG_FILE"; then
-	read -p "Enter your Git username: " git_username
+	read -p "Enter your Git username (name, username or email): " git_username
 	read -p "Enter your JIRA domain (example.atlassian.net): " jira_domain
 	read -p "Enter your email (used in JIRA): " jira_email
 	read -p "Enter your JIRA API token (manage your tokens from here: https://id.atlassian.com/manage-profile/security/api-tokens): " jira_api_token

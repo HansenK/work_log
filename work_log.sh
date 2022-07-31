@@ -17,8 +17,27 @@ if [ "$should_init" = "init" ]; then
 	exit 1	
 fi
 
-last_week_end_date=$(date -d 'last Sunday' +"%Y-%m-%d")
-last_week_start_date=$(date -d 'last Sunday - 6 days' +"%Y-%m-%d")
+end_date=""
+start_date=""
+
+# Get dates
+echo "Select one of the date ranges below:"
+select opt in "This week" "Last week"
+do
+	case $opt in 
+		"This week")
+			end_date=$(date +"%Y-%m-%d")
+			start_date=$(date -d 'last Monday' +"%Y-%m-%d")
+			break ;;
+			
+		"Last week") 
+			end_date=$(date -d 'last Sunday' +"%Y-%m-%d")
+			start_date=$(date -d 'last Sunday - 6 days' +"%Y-%m-%d")
+			break ;;
+
+		*) echo "Invalid option!" ;;
+	esac
+done
 
 # Check and install dependencies
 if ! command -v pip &> /dev/null
@@ -61,7 +80,7 @@ fi
 clear
 
 # Get git history
-all_history=$(git log --oneline --decorate --all --author=$git_username --after=$last_week_start_date --until=$last_week_end_date)
+all_history=$(git log --oneline --decorate --all --author=$git_username --after=$start_date --until=$end_date)
 
 if [ $? = 128 ]; then
 	exit 0
@@ -79,7 +98,7 @@ tickets_array=(${match// / })
 unique_tickets=($(for ticket in "${tickets_array[@]}"; do echo "${ticket}"; done | sort -u))
 
 # Get total worked time
-toggl_worked_time=$(toggl sum -st -s $last_week_start_date -p $last_week_end_date -o "$toggl_project")
+toggl_worked_time=$(toggl sum -st -s $start_date -p $end_date -o "$toggl_project")
 toggl_worked_time_arr=(${toggl_worked_time// / })
 total_worked_time="${toggl_worked_time_arr[4]}"
 

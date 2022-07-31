@@ -1,9 +1,10 @@
 #!/bin/bash
 
-should_init=$1
-# Init
+CONFIG_FILE=~/work_log_config.json
+first_param=$1
 
-if [ "$should_init" = "init" ]; then
+# Init
+if [ "$first_param" = "init" ]; then
 	if [[ -f work_log.sh ]]; then
 		echo "[+] starting..."
 		sudo cp work_log.sh /usr/local/bin
@@ -15,6 +16,18 @@ if [ "$should_init" = "init" ]; then
 
 	echo "[-] Error! You must only run the init config inside the repository folder, where the work_log.sh file is located."
 	exit 1	
+fi
+
+# Clear config
+if [ "$first_param" = "clear-config" ]; then
+	if ! test -f "$CONFIG_FILE"; then
+		echo "[+] There are no configurations yet to clear!"
+		exit
+	fi
+	
+	rm ~/work_log_config.json
+	echo "[+] All Configurations were removed!"
+	exit
 fi
 
 end_date=""
@@ -60,7 +73,6 @@ then
 fi
 
 # Config file and values management
-CONFIG_FILE=~/work_log_config.json
 if ! test -f "$CONFIG_FILE"; then
 	read -p "Enter your Git username: " git_username
 	read -p "Enter your JIRA domain (example.atlassian.net): " jira_domain
@@ -80,7 +92,7 @@ fi
 clear
 
 # Get git history
-all_history=$(git log --oneline --decorate --all --author=$git_username --after=$start_date --until=$end_date)
+all_history=$(git log --all --author="$git_username" --after=$start_date --until=$end_date)
 
 if [ $? = 128 ]; then
 	exit 0
